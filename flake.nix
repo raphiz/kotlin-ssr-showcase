@@ -13,7 +13,7 @@
     pre-commit-hooks,
     ...
   }: let
-    version = self.shortRev or "dirty";
+    version = "0.1.0";
   in
     flake-parts.lib.mkFlake {inherit inputs;} {
       systems = nixpkgs.lib.systems.flakeExposed;
