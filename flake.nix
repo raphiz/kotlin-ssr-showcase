@@ -23,8 +23,8 @@
             kotlin-ssr-showcase = self.packages.${prev.system}.default;
           };
           dev = final: prev: {
-            jdk = prev.jdk22_headless;
-            jre_headless = prev.jdk22_headless;
+            jdk = prev.jdk21_headless;
+            jre_headless = prev.jdk21_headless;
             ktlint = prev.ktlint;
             detekt = prev.detekt;
             gradle = prev.callPackage (prev.gradleGen {
