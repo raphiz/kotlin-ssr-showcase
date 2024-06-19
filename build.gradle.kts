@@ -14,6 +14,7 @@ dependencies {
     implementation(kotlin("stdlib-jdk8"))
 
     testImplementation(platform("org.junit:junit-bom:5.10.2"))
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
     testImplementation("org.junit.jupiter:junit-jupiter-api")
     testImplementation("org.junit.jupiter:junit-jupiter-engine")
     testImplementation("io.strikt:strikt-core:0.34.1")
