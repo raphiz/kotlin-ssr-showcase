@@ -18,18 +18,24 @@
     flake-parts.lib.mkFlake {inherit inputs;} {
       systems = nixpkgs.lib.systems.flakeExposed;
       flake = {
-        overlays.default = final: prev: {
-          jdk = prev.jdk22_headless;
-          jre_headless = prev.jdk22_headless;
-          ktlint = prev.ktlint;
-          detekt = prev.detekt;
-          gradle = prev.callPackage (prev.gradleGen {
-            defaultJava = final.jdk;
-            version = "8.8";
-            nativeVersion = "0.22-milestone-26";
-            hash = "sha256-pLQVhgH4Y2ze6rCb12r7ZAAwu1sUSq/iYaXorwJ9xhI=";
-          }) {};
+        overlays = {
+          default = final: prev: {
+            kotlin-ssr-showcase = self.packages.${prev.system}.default;
+          };
+          dev = final: prev: {
+            jdk = prev.jdk22_headless;
+            jre_headless = prev.jdk22_headless;
+            ktlint = prev.ktlint;
+            detekt = prev.detekt;
+            gradle = prev.callPackage (prev.gradleGen {
+              defaultJava = final.jdk;
+              version = "8.8";
+              nativeVersion = "0.22-milestone-26";
+              hash = "sha256-pLQVhgH4Y2ze6rCb12r7ZAAwu1sUSq/iYaXorwJ9xhI=";
+            }) {};
+          };
         };
+        nixosModules.kotlin-ssr-showcase = import ./module.nix;
       };
       perSystem = {
         config,
@@ -40,6 +46,7 @@
           inherit system;
           overlays = [
             build-gradle-application.overlays.default
+            self.overlays.dev
             self.overlays.default
           ];
         };
@@ -52,6 +59,9 @@
             };
         };
         checks = {
+          integrationTest = pkgs.nixosTest (import ./integration-test.nix {
+            kotlin-ssr-showcase-module = self.nixosModules.kotlin-ssr-showcase;
+          });
           pre-commit-check = pre-commit-hooks.lib.${system}.run {
             src = ./.;
             hooks = {
