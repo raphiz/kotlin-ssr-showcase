@@ -20,6 +20,8 @@
       flake = {
         overlays.default = final: prev: {
           jdk = prev.jdk22_headless;
+          jre_headless = prev.jdk22_headless;
+          ktlint = prev.ktlint;
           gradle = prev.callPackage (prev.gradleGen {
             defaultJava = final.jdk;
             version = "8.8";
@@ -54,12 +56,19 @@
             hooks = {
               alejandra.enable = true;
               convco.enable = true;
+              ktlint = {
+                enable = true;
+                name = "ktlint";
+                entry = "${pkgs.ktlint}/bin/ktlint";
+                files = "\\.(kt|kts)$";
+                language = "system";
+              };
             };
           };
         };
         devShells.default = pkgs.mkShellNoCC {
           inherit (self.checks.${system}.pre-commit-check) shellHook;
-          buildInputs = with pkgs; [jdk gradle updateVerificationMetadata];
+          buildInputs = with pkgs; [jdk gradle ktlint updateVerificationMetadata];
         };
 
         formatter = pkgs.alejandra;

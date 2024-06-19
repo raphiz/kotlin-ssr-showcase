@@ -1,5 +1,3 @@
-import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
-
 plugins {
     kotlin("jvm") version "2.0.0"
     application
@@ -25,7 +23,6 @@ tasks.test {
     useJUnitPlatform()
 }
 
-
 kotlin {
     jvmToolchain(22)
     compilerOptions {
@@ -36,7 +33,6 @@ kotlin {
 tasks.named<JavaExec>("run").configure {
     jvmArgs("-XX:TieredStopAtLevel=1")
 }
-
 
 tasks.withType<AbstractArchiveTask>().configureEach {
     isPreserveFileTimestamps = false
