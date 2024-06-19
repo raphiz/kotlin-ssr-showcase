@@ -22,6 +22,7 @@
           jdk = prev.jdk22_headless;
           jre_headless = prev.jdk22_headless;
           ktlint = prev.ktlint;
+          detekt = prev.detekt;
           gradle = prev.callPackage (prev.gradleGen {
             defaultJava = final.jdk;
             version = "8.8";
@@ -56,6 +57,15 @@
             hooks = {
               alejandra.enable = true;
               convco.enable = true;
+              detekt = {
+                enable = true;
+                name = "detekt";
+                entry = let
+                  script = pkgs.writeShellScriptBin "detekt-wrapper" ''IFS=','; ${pkgs.detekt}/bin/detekt -i "$*"; unset IFS;'';
+                in "${script}/bin/detekt-wrapper";
+                files = "\\.(kt|kts)$";
+                language = "system";
+              };
               ktlint = {
                 enable = true;
                 name = "ktlint";
@@ -72,12 +82,13 @@
             text = ''
               ${pkgs.alejandra}/bin/alejandra .
               ${pkgs.ktlint}/bin/ktlint --format
+              ${pkgs.detekt}/bin/detekt --auto-correct
             '';
           };
         in
           pkgs.mkShellNoCC {
             inherit (self.checks.${system}.pre-commit-check) shellHook;
-            buildInputs = with pkgs; [jdk gradle ktlint updateVerificationMetadata autoformat];
+            buildInputs = with pkgs; [jdk gradle ktlint detekt updateVerificationMetadata autoformat];
           };
 
         formatter = pkgs.alejandra;
