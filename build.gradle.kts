@@ -4,7 +4,7 @@ plugins {
 }
 
 application {
-    mainClass.set("io.github.raphiz.ssr.MainKt")
+    mainClass.set("io.github.raphiz.ssr.AppKt")
 }
 
 group = "io.github.raphiz.ssr"
@@ -12,6 +12,9 @@ version = System.getenv("APP_VERSION") ?: "dirty"
 
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
+
+    implementation(platform("org.http4k:http4k-bom:5.23.0.0"))
+    implementation("org.http4k:http4k-core")
 
     testImplementation(platform("org.junit:junit-bom:5.10.2"))
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
