@@ -77,6 +77,22 @@
           };
         };
         devShells.default = let
+          build = pkgs.writeShellApplication {
+            name = "build";
+            text = ''gradle :clean :check :installDist'';
+          };
+          build-continuously = pkgs.writeShellApplication {
+            name = "build-continuously";
+            text = ''gradle --continuous :check :installDist'';
+          };
+          integration-test = pkgs.writeShellApplication {
+            name = "integration-test";
+            text = ''nix flake check'';
+          };
+          rundev = pkgs.writeShellApplication {
+            name = "rundev";
+            text = ''gradle :run'';
+          };
           autoformat = pkgs.writeShellApplication {
             name = "autoformat";
             text = ''
@@ -88,7 +104,7 @@
         in
           pkgs.mkShellNoCC {
             inherit (self.checks.${system}.pre-commit-check) shellHook;
-            buildInputs = with pkgs; [jdk gradle ktlint detekt updateVerificationMetadata autoformat];
+            buildInputs = with pkgs; [jdk gradle ktlint detekt updateVerificationMetadata build build-continuously integration-test rundev autoformat];
           };
 
         formatter = pkgs.alejandra;

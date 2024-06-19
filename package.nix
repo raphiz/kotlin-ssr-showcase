@@ -7,8 +7,9 @@ buildGradleApplication
 {
   pname = "kotlin-ssr-showcase";
   version = version;
-  src = ./.;
-  meta = with lib; {
+  buildTask = ":check :installDist";
+  src = ./.; # TODO: Filter ci config, docs, nix tests etc.
+  meta = {
     description = "Kotlin SSR Showcase";
     maintainers = [
       {
@@ -18,10 +19,10 @@ buildGradleApplication
         name = "Raphael Zimmermann";
       }
     ];
-    sourceProvenance = with sourceTypes; [
+    sourceProvenance = with lib.sourceTypes; [
       fromSource
       binaryBytecode
     ];
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
 }
