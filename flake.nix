@@ -53,6 +53,7 @@
             src = ./.;
             hooks = {
               alejandra.enable = true;
+              convco.enable = true;
             };
           };
         };
