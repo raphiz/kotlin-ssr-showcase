@@ -16,6 +16,8 @@ dependencies {
     implementation(platform("org.http4k:http4k-bom:5.23.0.0"))
     implementation("org.http4k:http4k-core")
 
+    implementation("org.jetbrains.kotlinx:kotlinx-html-jvm:0.8.0")
+
     testImplementation(platform("org.junit:junit-bom:5.10.2"))
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
     testImplementation("org.junit.jupiter:junit-jupiter-api")

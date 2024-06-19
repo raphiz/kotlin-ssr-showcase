@@ -1,6 +1,7 @@
 package io.github.raphiz.ssr.web
 
 import io.github.raphiz.ssr.support.route
+import io.github.raphiz.ssr.web.components.page
 import org.http4k.core.Method
 import org.http4k.core.Response
 import org.http4k.core.Status
@@ -23,6 +24,6 @@ private object Routes {
 private fun index() =
     Routes.ROOT.route(
         Method.GET to {
-            Response(Status.OK).body("Hello World")
+            Response(Status.OK).page { +"Hello World" }
         },
     )
