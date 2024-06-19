@@ -66,10 +66,19 @@
             };
           };
         };
-        devShells.default = pkgs.mkShellNoCC {
-          inherit (self.checks.${system}.pre-commit-check) shellHook;
-          buildInputs = with pkgs; [jdk gradle ktlint updateVerificationMetadata];
-        };
+        devShells.default = let
+          autoformat = pkgs.writeShellApplication {
+            name = "autoformat";
+            text = ''
+              ${pkgs.alejandra}/bin/alejandra .
+              ${pkgs.ktlint}/bin/ktlint --format
+            '';
+          };
+        in
+          pkgs.mkShellNoCC {
+            inherit (self.checks.${system}.pre-commit-check) shellHook;
+            buildInputs = with pkgs; [jdk gradle ktlint updateVerificationMetadata autoformat];
+          };
 
         formatter = pkgs.alejandra;
       };
