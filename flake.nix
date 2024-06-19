@@ -2,6 +2,7 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.05";
     build-gradle-application.url = "github:raphiz/buildGradleApplication";
+    pre-commit-hooks.url = "github:cachix/pre-commit-hooks.nix";
   };
 
   outputs = inputs @ {
@@ -9,6 +10,7 @@
     nixpkgs,
     flake-parts,
     build-gradle-application,
+    pre-commit-hooks,
     ...
   }: let
     version = self.shortRev or "dirty";
@@ -46,11 +48,18 @@
               inherit version;
             };
         };
-
-        devShells.default = with pkgs;
-          mkShellNoCC {
-            buildInputs = [jdk gradle updateVerificationMetadata];
+        checks = {
+          pre-commit-check = pre-commit-hooks.lib.${system}.run {
+            src = ./.;
+            hooks = {
+              alejandra.enable = true;
+            };
           };
+        };
+        devShells.default = pkgs.mkShellNoCC {
+          inherit (self.checks.${system}.pre-commit-check) shellHook;
+          buildInputs = with pkgs; [jdk gradle updateVerificationMetadata];
+        };
 
         formatter = pkgs.alejandra;
       };
