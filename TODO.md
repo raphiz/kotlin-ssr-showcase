@@ -1,0 +1,17 @@
+- simplify shell.nix
+  - use `pkgs` from flake parts
+  - use `overlays` with flake parts
+  - separate `shell.nix`?
+- Integrate vite in nix (rundev, build, build-continuously)
+- Add js/css formatters(+linters)
+  - eslint + ts stuff
+  - stylelint
+  - prettier
+  - Integrate into autoformat
+- CSS Modules Support
+- Code generator für CSS
+- Stimulus Controller Code Generator
+- add hot reload (from toolia)
+- GitHub Actions
+  - See kokus v2
+- Renovate
