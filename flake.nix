@@ -25,6 +25,7 @@
           dev = final: prev: {
             jdk = prev.jdk21_headless;
             jre_headless = prev.jdk21_headless;
+            nodejs = prev.nodejs_22;
             ktlint = prev.ktlint;
             detekt = prev.detekt;
             gradle = prev.callPackage (prev.gradleGen {
@@ -114,7 +115,7 @@
         in
           pkgs.mkShellNoCC {
             inherit (self.checks.${system}.pre-commit-check) shellHook;
-            buildInputs = with pkgs; [jdk gradle ktlint detekt updateVerificationMetadata build build-continuously integration-test rundev autoformat];
+            buildInputs = with pkgs; [jdk nodejs gradle ktlint detekt updateVerificationMetadata build build-continuously integration-test rundev autoformat];
           };
 
         formatter = pkgs.alejandra;

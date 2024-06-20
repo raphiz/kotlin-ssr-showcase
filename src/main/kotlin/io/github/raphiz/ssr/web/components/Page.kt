@@ -19,8 +19,22 @@ fun page(content: FlowContent.() -> Unit) =
             meta(charset = "utf-8")
             meta(name = "viewport", content = "width=device-width, initial-scale=1")
             title { }
+            script(type = "module") {
+                unsafe {
+                    +Resources.viteDevModeScript
+                }
+            }
         }
         body {
             content()
         }
     }
+
+private object Resources {
+    val viteDevModeScript =
+        requireNotNull(
+            this::class.java.getResourceAsStream("/vite-dev-mode.js"),
+        ) { "Missing vite dev mode script" }
+            .bufferedReader()
+            .readText()
+}
