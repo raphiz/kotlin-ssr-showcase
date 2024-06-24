@@ -72,7 +72,7 @@
                 enable = true;
                 name = "detekt";
                 entry = let
-                  script = pkgs.writeShellScriptBin "detekt-wrapper" ''IFS=','; ${pkgs.detekt}/bin/detekt -i "$*"; unset IFS;'';
+                  script = pkgs.writeShellScriptBin "detekt-wrapper" ''set -euo pipefail; IFS=','; ${pkgs.detekt}/bin/detekt --build-upon-default-config -c detekt-config.yml --auto-correct -i "$*"; unset IFS;'';
                 in "${script}/bin/detekt-wrapper";
                 files = "\\.(kt|kts)$";
                 language = "system";
@@ -80,7 +80,9 @@
               ktlint = {
                 enable = true;
                 name = "ktlint";
-                entry = "${pkgs.ktlint}/bin/ktlint";
+                entry = let
+                  script = pkgs.writeShellScriptBin "ktlint-wrapper" ''set -euo pipefail; ${pkgs.ktlint}/bin/ktlint --format'';
+                in "${script}/bin/ktlint-wrapper";
                 files = "\\.(kt|kts)$";
                 language = "system";
               };
@@ -88,34 +90,63 @@
           };
         };
         devShells.default = let
-          build = pkgs.writeShellApplication {
-            name = "build";
-            text = ''gradle :clean :check :installDist'';
+          # Scripts use process compose, see https://f1bonacc1.github.io/process-compose/launcher/
+          scripts = {
+            build = {
+              processes = {
+                frontend.command = ''npm ci && npx vite build'';
+                backend = {
+                  command = ''gradle :clean :check :installDist'';
+                  depends_on.frontend.condition = "process_completed";
+                };
+              };
+            };
+
+            build-continuously = {
+              processes = {
+                "init frontend".command = ''npm ci && npx vite build'';
+                frontend = {
+                  command = ''npx vite build -w'';
+                  depends_on."init frontend".condition = "process_completed";
+                };
+                backend = {
+                  command = ''gradle --continuous :check :installDist'';
+                  depends_on."init frontend".condition = "process_completed";
+                };
+              };
+            };
+
+            dev = {
+              processes = {
+                "init frontend".command = ''npm ci && npx vite build'';
+                frontend = {
+                  command = ''npx vite dev'';
+                  depends_on."init frontend".condition = "process_completed";
+                };
+                backend = {
+                  command = ''gradle --continuous :run'';
+                  depends_on."init frontend".condition = "process_completed";
+                };
+              };
+            };
+
+            integration-test.processes.integration-test.command = ''nix flake check'';
+
+            lint.processes.lint.command = ''pre-commit run --all-files "''${@}"'';
           };
-          build-continuously = pkgs.writeShellApplication {
-            name = "build-continuously";
-            text = ''gradle --continuous :check :installDist'';
-          };
-          integration-test = pkgs.writeShellApplication {
-            name = "integration-test";
-            text = ''nix flake check'';
-          };
-          rundev = pkgs.writeShellApplication {
-            name = "rundev";
-            text = ''gradle :run'';
-          };
-          autoformat = pkgs.writeShellApplication {
-            name = "autoformat";
-            text = ''
-              ${pkgs.alejandra}/bin/alejandra .
-              ${pkgs.ktlint}/bin/ktlint --format
-              ${pkgs.detekt}/bin/detekt --auto-correct
-            '';
-          };
+          composeScripts = scripts:
+            pkgs.lib.mapAttrsToList (name: value: let
+              cfg = pkgs.writeText "${name}.process-compose.yml" (pkgs.lib.generators.toYAML {} value);
+            in
+              pkgs.writeShellApplication {
+                inherit name;
+                text = ''${pkgs.process-compose}/bin/process-compose -t=false -f ${cfg}'';
+              })
+            scripts;
         in
           pkgs.mkShellNoCC {
             inherit (self.checks.${system}.pre-commit-check) shellHook;
-            buildInputs = with pkgs; [jdk nodejs gradle ktlint detekt updateVerificationMetadata build build-continuously integration-test rundev autoformat];
+            buildInputs = (with pkgs; [jdk nodejs gradle updateVerificationMetadata]) ++ [(composeScripts scripts)];
           };
 
         formatter = pkgs.alejandra;

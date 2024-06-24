@@ -6,5 +6,6 @@ import org.http4k.routing.RoutingHttpHandler
 import org.http4k.routing.bind
 import org.http4k.routing.routes
 
+@Suppress("SpreadOperator")
 fun String.route(vararg list: Pair<Method, HttpHandler>): RoutingHttpHandler =
     routes(*list.map { this bind it.first to it.second }.toTypedArray())
