@@ -112,6 +112,13 @@
               ${pkgs.detekt}/bin/detekt --auto-correct
             '';
           };
+          updateVerificationMetadata = pkgs.updateVerificationMetadata.override {
+            whitelist = [
+              # Required by intelliJ
+              "org.jetbrains.kotlin:kotlin-reflect:1.9.22"
+              "org.jetbrains.kotlin:kotlin-stdlib:1.9.22"
+            ];
+          };
         in
           pkgs.mkShellNoCC {
             inherit (self.checks.${system}.pre-commit-check) shellHook;
