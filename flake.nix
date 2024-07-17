@@ -146,10 +146,17 @@
                 text = ''${pkgs.process-compose}/bin/process-compose -t=false -f ${cfg}'';
               })
             scripts;
+          updateVerificationMetadata = pkgs.updateVerificationMetadata.override {
+            whitelist = [
+              # Required by intelliJ, see https://youtrack.jetbrains.com/issue/IDEA-354182/Gradle-dependency-verification-fails-with-kotlin-reflect-1.9.22.pom
+              "org.jetbrains.kotlin:kotlin-reflect:1.9.22"
+              "org.jetbrains.kotlin:kotlin-stdlib:1.9.22"
+            ];
+          };
         in
           pkgs.mkShellNoCC {
             inherit (self.checks.${system}.pre-commit-check) shellHook;
-            buildInputs = (with pkgs; [jdk nodejs gradle updateVerificationMetadata]) ++ [(composeScripts scripts)];
+            buildInputs = (with pkgs; [jdk nodejs gradle]) ++ [(composeScripts scripts) updateVerificationMetadata];
           };
 
         formatter = pkgs.alejandra;
