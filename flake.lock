@@ -6,11 +6,11 @@
         "nixpkgs": "nixpkgs"
       },
       "locked": {
-        "lastModified": 1718084606,
-        "narHash": "sha256-hE7cYKnGPbxwnvsHtoT6kGPRknAECjLT59W/y/OcqNc=",
+        "lastModified": 1720552364,
+        "narHash": "sha256-MVu6jCfrbAo1XYF401ckLwTFWJTkhrCBqbPvuCcOrGg=",
         "owner": "raphiz",
         "repo": "buildGradleApplication",
-        "rev": "1521b7678ccbd39984ebf00583519b10ced5ee8f",
+        "rev": "0c772829acadd67f6a47a3db4a28340115f46787",
         "type": "github"
       },
       "original": {
@@ -90,6 +90,24 @@
         "type": "github"
       }
     },
+    "nix-npm-buildpackage": {
+      "inputs": {
+        "nixpkgs": "nixpkgs_2"
+      },
+      "locked": {
+        "lastModified": 1686315622,
+        "narHash": "sha256-ccqZqY6wUFot0ewyNKQUrMR6IEliGza+pjKoSVMXIeM=",
+        "owner": "serokell",
+        "repo": "nix-npm-buildpackage",
+        "rev": "991a792bccd611842f6bc1aa99fe80380ad68d44",
+        "type": "github"
+      },
+      "original": {
+        "owner": "serokell",
+        "repo": "nix-npm-buildpackage",
+        "type": "github"
+      }
+    },
     "nixpkgs": {
       "locked": {
         "lastModified": 1717696253,
@@ -148,6 +166,20 @@
     },
     "nixpkgs_2": {
       "locked": {
+        "lastModified": 1653917367,
+        "narHash": "sha256-04MsJC0g9kE01nBuXThMppZK+yvCZECQnUaZKSU+HJo=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "437c8e6554911095f0557d524e9d2ffe1c26e33a",
+        "type": "github"
+      },
+      "original": {
+        "id": "nixpkgs",
+        "type": "indirect"
+      }
+    },
+    "nixpkgs_3": {
+      "locked": {
         "lastModified": 1718437845,
         "narHash": "sha256-ZT7Oc1g4I4pHVGGjQFnewFVDRLH5cIZhEzODLz9YXeY=",
         "owner": "NixOS",
@@ -162,7 +194,7 @@
         "type": "github"
       }
     },
-    "nixpkgs_3": {
+    "nixpkgs_4": {
       "locked": {
         "lastModified": 1710765496,
         "narHash": "sha256-p7ryWEeQfMwTB6E0wIUd5V2cFTgq+DRRBz2hYGnJZyA=",
@@ -182,7 +214,7 @@
       "inputs": {
         "flake-compat": "flake-compat",
         "gitignore": "gitignore",
-        "nixpkgs": "nixpkgs_3",
+        "nixpkgs": "nixpkgs_4",
         "nixpkgs-stable": "nixpkgs-stable"
       },
       "locked": {
@@ -203,7 +235,8 @@
       "inputs": {
         "build-gradle-application": "build-gradle-application",
         "flake-parts": "flake-parts_2",
-        "nixpkgs": "nixpkgs_2",
+        "nix-npm-buildpackage": "nix-npm-buildpackage",
+        "nixpkgs": "nixpkgs_3",
         "pre-commit-hooks": "pre-commit-hooks"
       }
     }

@@ -18,11 +18,19 @@ dependencies {
 
     implementation("org.jetbrains.kotlinx:kotlinx-html-jvm:0.8.0")
 
+    implementation("org.json:json:20240303")
+
     testImplementation(platform("org.junit:junit-bom:5.10.2"))
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
     testImplementation("org.junit.jupiter:junit-jupiter-api")
     testImplementation("org.junit.jupiter:junit-jupiter-engine")
     testImplementation("io.strikt:strikt-core:0.34.1")
+}
+
+sourceSets {
+    main {
+        output.dir(project.layout.buildDirectory.dir("resources/assets/"))
+    }
 }
 
 tasks.test {

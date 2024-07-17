@@ -3,6 +3,7 @@
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.05";
     build-gradle-application.url = "github:raphiz/buildGradleApplication";
     pre-commit-hooks.url = "github:cachix/pre-commit-hooks.nix";
+    nix-npm-buildpackage.url = "github:serokell/nix-npm-buildpackage";
   };
 
   outputs = inputs @ {
@@ -11,6 +12,7 @@
     flake-parts,
     build-gradle-application,
     pre-commit-hooks,
+    nix-npm-buildpackage,
     ...
   }: let
     version = "0.1.0";
@@ -46,6 +48,7 @@
         pkgs = import nixpkgs {
           inherit system;
           overlays = [
+            nix-npm-buildpackage.overlays.default
             build-gradle-application.overlays.default
             self.overlays.dev
             self.overlays.default

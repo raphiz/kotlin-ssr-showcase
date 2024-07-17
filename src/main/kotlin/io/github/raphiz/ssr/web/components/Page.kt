@@ -1,5 +1,6 @@
 package io.github.raphiz.ssr.web.components
 
+import io.github.raphiz.ssr.support.AssetLocator
 import io.github.raphiz.ssr.support.html
 import kotlinx.html.*
 import org.http4k.core.ContentType
@@ -12,6 +13,13 @@ fun Response.page(content: FlowContent.() -> Unit) =
                 .page(content),
         )
 
+val assetLocator: AssetLocator? =
+    AssetLocator::class.java
+        .getResource("/.vite/manifest.json")
+        ?.readText()
+        ?.let { AssetLocator.fromManifest(it) }
+val mainAssets = assetLocator?.locate("src/main/typescript/main.ts")
+
 fun page(content: FlowContent.() -> Unit) =
     html {
         lang = "en"
@@ -19,9 +27,21 @@ fun page(content: FlowContent.() -> Unit) =
             meta(charset = "utf-8")
             meta(name = "viewport", content = "width=device-width, initial-scale=1")
             title { }
-            script(type = "module") {
-                unsafe {
-                    +Resources.viteDevModeScript
+            if (mainAssets != null) {
+                mainAssets.css.forEach {
+                    link(rel = "stylesheet", href = it) {}
+                }
+                mainAssets.scripts.forEach {
+                    script(type = "module", src = it) {}
+                }
+                mainAssets.preloads.forEach {
+                    script(type = "modulepreload", src = it) {}
+                }
+            } else {
+                script(type = "module") {
+                    unsafe {
+                        +Resources.viteDevModeScript
+                    }
                 }
             }
         }
