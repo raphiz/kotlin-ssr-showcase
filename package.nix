@@ -23,6 +23,14 @@ in
       version = version;
       buildTask = ":check :installDist";
       src = ./.; # TODO: Filter ci config, docs, nix tests etc.
+      dependencyFilter = depSpec:
+      # kotlin-result-metadata-x.y.z.jar is not uploaded to m2...
+        !(
+          depSpec.component.group
+          == "com.michael-bull.kotlin-result"
+          && depSpec.component.name == "kotlin-result"
+          && lib.strings.match "^kotlin-result-metadata-[0-9]+\.[0-9]+\.[0-9]+\.jar$" depSpec.name != null
+        );
       meta = {
         description = "Kotlin SSR Showcase";
         maintainers = [
