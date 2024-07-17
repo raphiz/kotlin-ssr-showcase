@@ -21,25 +21,37 @@ fun webAppStack(): RoutingHttpHandler {
     return webAppStack
 }
 
+// TODO;
+// Required types:
+// `Controller` marker interface
+// `Target` type
+// `Icon` type
+// `CssClass` type
+
 private fun index() =
     Routes.root to {
         Response(Status.OK).page {
             div {
+                // controller = PasswordVisibility
                 attributes["data-controller"] = "password-visibility"
                 attributes["data-password-visibility-class"] = "hidden"
                 input {
                     type = InputType.password
+                    // target = PasswordVisibility.targets.input
                     attributes["data-password-visibility-target"] = "input"
                     attributes["spellcheck"] = "false"
                 }
                 button {
                     type = ButtonType.button
+                    // action = PasswordVisibility.actions.toggle
                     attributes["data-action"] = "password-visibility#toggle"
                     span {
+                        // target = PasswordVisibility.targets.icon
                         attributes["data-password-visibility-target"] = "icon"
                         +"""Eye"""
                     }
                     span("hidden") {
+                        // target = PasswordVisibility.targets.icon
                         attributes["data-password-visibility-target"] = "icon"
                         +"""Eye Slash"""
                     }
