@@ -1,9 +1,8 @@
 package io.github.raphiz.ssr.web
 
-import io.github.raphiz.ssr.support.route
+import io.github.raphiz.ssr.support.to
 import io.github.raphiz.ssr.web.components.page
 import kotlinx.html.*
-import org.http4k.core.Method
 import org.http4k.core.Response
 import org.http4k.core.Status
 import org.http4k.routing.ResourceLoader.Companion.Classpath
@@ -23,30 +22,28 @@ fun webAppStack(): RoutingHttpHandler {
 }
 
 private fun index() =
-    Routes.ROOT.route(
-        Method.GET to {
-            Response(Status.OK).page {
-                div {
-                    attributes["data-controller"] = "password-visibility"
-                    attributes["data-password-visibility-class"] = "hidden"
-                    input {
-                        type = InputType.password
-                        attributes["data-password-visibility-target"] = "input"
-                        attributes["spellcheck"] = "false"
+    Routes.root to {
+        Response(Status.OK).page {
+            div {
+                attributes["data-controller"] = "password-visibility"
+                attributes["data-password-visibility-class"] = "hidden"
+                input {
+                    type = InputType.password
+                    attributes["data-password-visibility-target"] = "input"
+                    attributes["spellcheck"] = "false"
+                }
+                button {
+                    type = ButtonType.button
+                    attributes["data-action"] = "password-visibility#toggle"
+                    span {
+                        attributes["data-password-visibility-target"] = "icon"
+                        +"""Eye"""
                     }
-                    button {
-                        type = ButtonType.button
-                        attributes["data-action"] = "password-visibility#toggle"
-                        span {
-                            attributes["data-password-visibility-target"] = "icon"
-                            +"""Eye"""
-                        }
-                        span("hidden") {
-                            attributes["data-password-visibility-target"] = "icon"
-                            +"""Eye Slash"""
-                        }
+                    span("hidden") {
+                        attributes["data-password-visibility-target"] = "icon"
+                        +"""Eye Slash"""
                     }
                 }
             }
-        },
-    )
+        }
+    }

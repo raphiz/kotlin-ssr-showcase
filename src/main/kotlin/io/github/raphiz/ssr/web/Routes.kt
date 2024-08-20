@@ -1,5 +1,8 @@
 package io.github.raphiz.ssr.web
 
+import io.github.raphiz.ssr.support.at
+import org.http4k.core.Method
+
 object Routes {
-    const val ROOT = "/"
+    val root = Method.GET at "/"
 }
