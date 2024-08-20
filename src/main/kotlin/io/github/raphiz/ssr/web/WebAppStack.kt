@@ -22,10 +22,6 @@ fun webAppStack(): RoutingHttpHandler {
     return webAppStack
 }
 
-private object Routes {
-    const val ROOT = "/"
-}
-
 private fun index() =
     Routes.ROOT.route(
         Method.GET to {
