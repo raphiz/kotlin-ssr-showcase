@@ -156,7 +156,7 @@
         in
           pkgs.mkShellNoCC {
             inherit (self.checks.${system}.pre-commit-check) shellHook;
-            buildInputs = (with pkgs; [jdk nodejs gradle]) ++ [(composeScripts scripts) updateVerificationMetadata];
+            buildInputs = (with pkgs; [jdk nodejs gradle bashInteractive]) ++ [(composeScripts scripts) updateVerificationMetadata];
           };
 
         formatter = pkgs.alejandra;
