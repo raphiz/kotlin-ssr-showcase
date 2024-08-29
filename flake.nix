@@ -87,6 +87,13 @@
                 files = "\\.(kt|kts)$";
                 language = "system";
               };
+              sqlfluff = {
+                enable = true;
+                name = "sqlfluff";
+                entry = "${pkgs.sqlfluff}/bin/sqlfluff lint --dialect sqlite";
+                files = "\\.sql$";
+                language = "system";
+              };
             };
           };
         };
@@ -154,7 +161,7 @@
         in
           pkgs.mkShellNoCC {
             inherit (self.checks.${system}.pre-commit-check) shellHook;
-            buildInputs = (with pkgs; [jdk nodejs gradle bashInteractive]) ++ [(composeScripts scripts) updateVerificationMetadata];
+            buildInputs = (with pkgs; [jdk nodejs gradle sqlfluff bashInteractive]) ++ [(composeScripts scripts) updateVerificationMetadata];
           };
 
         formatter = pkgs.alejandra;
