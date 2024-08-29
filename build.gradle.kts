@@ -1,5 +1,5 @@
 plugins {
-    kotlin("jvm") version "2.0.0"
+    kotlin
     application
 }
 
@@ -30,26 +30,9 @@ dependencies {
 
 sourceSets {
     main {
+        // Add vite artifacts to be served as static assets.
+        // Assets are added only for production builds via nix build.
+        // The development setup uses the vite development server instead.
         output.dir(project.layout.buildDirectory.dir("resources/assets/"))
     }
-}
-
-tasks.test {
-    useJUnitPlatform()
-}
-
-kotlin {
-    jvmToolchain(21)
-    compilerOptions {
-        freeCompilerArgs.set(listOf("-Xjsr305=strict"))
-    }
-}
-
-tasks.named<JavaExec>("run").configure {
-    jvmArgs("-XX:TieredStopAtLevel=1")
-}
-
-tasks.withType<AbstractArchiveTask>().configureEach {
-    isPreserveFileTimestamps = false
-    isReproducibleFileOrder = true
 }
