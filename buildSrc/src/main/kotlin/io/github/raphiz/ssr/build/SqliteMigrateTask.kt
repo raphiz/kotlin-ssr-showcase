@@ -29,6 +29,7 @@ abstract class SqliteMigrateTask : DefaultTask() {
             .configure()
             .dataSource(jdbcUrl, username.get(), password.get())
             .locations("filesystem:${migrationsLocation.asFile}")
+            .cleanDisabled(false)
             .cleanOnValidationError(true)
             .load()
             .migrate()
