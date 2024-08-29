@@ -69,6 +69,9 @@ jooq {
                 excludes = "flyway_schema_history|sqlite_master|sqlite_sequence"
                 isOutputSchemaToDefault = true
             }
+            strategy {
+                name = "io.github.raphiz.ssr.build.PluralToSingularNamingStrategy"
+            }
             target {
                 directory = dbJooqOutputDirectory.get().asFile.absolutePath
                 packageName = "io.github.raphiz.ssr.db"
