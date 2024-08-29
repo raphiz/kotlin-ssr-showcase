@@ -83,9 +83,7 @@
               ktlint = {
                 enable = true;
                 name = "ktlint";
-                entry = let
-                  script = pkgs.writeShellScriptBin "ktlint-wrapper" ''set -euo pipefail; ${pkgs.ktlint}/bin/ktlint --format'';
-                in "${script}/bin/ktlint-wrapper";
+                entry = "${pkgs.ktlint}/bin/ktlint --format";
                 files = "\\.(kt|kts)$";
                 language = "system";
               };
