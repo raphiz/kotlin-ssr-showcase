@@ -1,2 +1,5 @@
 [*.{kt,kts}]
 ktlint_standard_no-wildcard-imports = disabled
+
+[{build/**/*,buildSrc/build/**/*}]
+ktlint = disabled
