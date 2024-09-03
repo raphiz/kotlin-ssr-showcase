@@ -90,7 +90,7 @@
               sqlfluff = {
                 enable = true;
                 name = "sqlfluff";
-                entry = "${pkgs.sqlfluff}/bin/sqlfluff lint --dialect sqlite";
+                entry = "${pkgs.sqlfluff}/bin/sqlfluff lint";
                 files = "\\.sql$";
                 language = "system";
               };
