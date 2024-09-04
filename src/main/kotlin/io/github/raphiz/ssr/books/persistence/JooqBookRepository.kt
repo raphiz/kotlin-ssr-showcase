@@ -2,8 +2,9 @@ package io.github.raphiz.ssr.books.persistence
 
 import io.github.raphiz.ssr.books.domain.Book
 import io.github.raphiz.ssr.books.domain.BookRepository
+import io.github.raphiz.ssr.db.tables.findBookRecordById
 import io.github.raphiz.ssr.db.tables.records.BookRecord
-import io.github.raphiz.ssr.db.tables.references.BOOKS
+import io.github.raphiz.ssr.db.tables.saveBookRecords
 import org.jooq.DSLContext
 
 class JooqBookRepository(
@@ -11,10 +12,10 @@ class JooqBookRepository(
 ) : BookRepository {
     override fun save(book: Book) {
         val record = book.toRecord()
-        dsl.batchMerge(record).execute()
+        dsl.saveBookRecords(record)
     }
 
-    override fun findById(id: Int): Book? = dsl.selectFrom(BOOKS).where(BOOKS.ID.eq(id)).fetchOne { it.toBook() }
+    override fun findById(id: Int): Book? = dsl.findBookRecordById(id)?.toBook()
 }
 
 private fun BookRecord.toBook() = Book(id!!, title!!)

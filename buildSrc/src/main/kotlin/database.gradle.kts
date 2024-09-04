@@ -58,7 +58,7 @@ tasks.jooqCodegen.configure {
 jooq {
     configuration {
         generator {
-            name = "org.jooq.codegen.KotlinGenerator"
+            name = "io.github.raphiz.ssr.build.CustomCodeGenerator"
             jdbc {
                 url = "jdbc:sqlite://${dbTemplateFile.absolutePath}"
                 user = dbUsername
