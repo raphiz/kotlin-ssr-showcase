@@ -29,7 +29,7 @@
             jre_headless = prev.jdk21_headless;
             nodejs = prev.nodejs_22;
             ktlint = prev.ktlint;
-            detekt = prev.detekt;
+            detekt = prev.writeShellScriptBin "detekt" ''${prev.detekt}/bin/detekt --build-upon-default-config -c detekt-config.yml --excludes '**/build/**,**/ExpectedTaskExtensions.kt' "$@"'';
             gradle = prev.callPackage (prev.gradleGen {
               defaultJava = final.jdk;
               version = "8.8";
@@ -75,7 +75,7 @@
                 enable = true;
                 name = "detekt";
                 entry = let
-                  script = pkgs.writeShellScriptBin "detekt-wrapper" ''set -euo pipefail; IFS=','; ${pkgs.detekt}/bin/detekt --build-upon-default-config -c detekt-config.yml --auto-correct -i "$*"; unset IFS;'';
+                  script = pkgs.writeShellScriptBin "detekt-wrapper" ''set -euo pipefail; IFS=','; ${pkgs.detekt}/bin/detekt --auto-correct -i "$*"; unset IFS;'';
                 in "${script}/bin/detekt-wrapper";
                 files = "\\.(kt|kts)$";
                 language = "system";
