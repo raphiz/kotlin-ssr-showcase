@@ -37,3 +37,7 @@ sourceSets {
         output.dir(project.layout.buildDirectory.dir("resources/assets/"))
     }
 }
+
+jooq.executions.getByName("").configuration.run {
+    generator.target.packageName = "io.github.raphiz.ssr.db"
+}

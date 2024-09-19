@@ -74,7 +74,6 @@ jooq {
             }
             target {
                 directory = dbJooqOutputDirectory.get().asFile.absolutePath
-                packageName = "io.github.raphiz.ssr.db"
             }
         }
     }
